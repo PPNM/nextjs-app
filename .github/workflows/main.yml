@@ -13,6 +13,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Specify the Node.js version you're using
+
       - name: SSH into AWS Lightsail and Deploy
         uses: appleboy/ssh-action@v1.1.0
         with:
@@ -20,24 +25,33 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           script: |
-                  
-            # Install project dependencies and build
+            # Ensure the server is up-to-date
+            echo "Updating and upgrading system packages..."
+            sudo apt-get update -y
+            sudo apt-get upgrade -y
+
+            # Install project dependencies
             echo "Installing project dependencies and building the project..."
             cd /var/www/nextjs-app
             npm install
             npm audit fix --force
             npm run build
-            chown -R $USER:www-data /var/www/nextjs-app
-         
-            # Start application with PM2
+
+            # Install and use PM2 to run the app
+            echo "Installing PM2..."
+            sudo npm install -g pm2
+
+            # Start the application with PM2
             echo "Starting application with PM2..."
-            npm install -g pm2
-            pm2 start next-app
+            pm2 start npm --name "nextjs-app" -- run start
             pm2 save
+
+            # Set PM2 to start on system boot
+            echo "Configuring PM2 to start on system boot..."
             sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $USER --hp /home/$USER
-    
+
             # Verify setup
-            echo "Verifying setup..."
+            echo "Verifying Node.js, npm, and PM2 versions..."
             node -v
             npm -v
             pm2 list
