@@ -20,8 +20,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           script: |
-
-                   
+                  
             # Install project dependencies and build
             echo "Installing project dependencies and building the project..."
             cd /var/www/nextjs-app
