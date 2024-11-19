@@ -21,12 +21,7 @@ jobs:
           key: ${{ secrets.SSHKEY }}
           script: |
 
-            # Clone repository
-            echo "Cloning repository..."
-            cd /var/www
-            git clone https://github.com/devktops/nextjs-app.git /var/www/nextjs-app || true
-            sudo chown -R $USER:www-data /var/www/nextjs-app
-            
+                   
             # Install project dependencies and build
             echo "Installing project dependencies and building the project..."
             cd /var/www/nextjs-app
