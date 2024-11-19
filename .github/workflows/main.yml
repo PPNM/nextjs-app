@@ -13,14 +13,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-  - name: SSH into AWS Lightsail and Deploy
+      - name: SSH into AWS Lightsail and Deploy
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           script: |
-
             # Install dependencies
             echo "Installing dependencies..."
             sudo apt update
@@ -35,6 +34,7 @@ jobs:
        
             # Install project dependencies and build
             echo "Installing project dependencies and building the project..."
+            cd /var/www/nextjs-app
             npm install
             npm audit fix --force
             npm run build
