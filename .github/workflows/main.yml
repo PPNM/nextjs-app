@@ -22,15 +22,15 @@ jobs:
           script: |
             # Install dependencies
             echo "Installing dependencies..."
-            sudo apt update
+            apt update
             curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-            sudo apt install -y nodejs npm nginx
+            apt install -y nodejs npm nginx
            
             # Clone repository
             echo "Cloning repository..."
             cd /var/www
             git clone https://github.com/devktops/nextjs-app.git /var/www/nextjs-app || true
-            sudo chown -R $USER:www-data /var/www/nextjs-app
+            chown -R $USER:www-data /var/www/nextjs-app
        
             # Install project dependencies and build
             echo "Installing project dependencies and building the project..."
@@ -38,11 +38,11 @@ jobs:
             npm install
             npm audit fix --force
             npm run build
-            sudo chown -R $USER:www-data /var/www/nextjs-app
+            chown -R $USER:www-data /var/www/nextjs-app
          
             # Start application with PM2
             echo "Starting application with PM2..."
-            sudo npm install -g pm2
+            npm install -g pm2
             pm2 start next-app
             pm2 save
             sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $USER --hp /home/$USER
