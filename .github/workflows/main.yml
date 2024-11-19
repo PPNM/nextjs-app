@@ -20,18 +20,13 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           script: |
-            # Install dependencies
-            echo "Installing dependencies..."
-            apt update
-            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-            apt install -y nodejs npm nginx
-           
+
             # Clone repository
             echo "Cloning repository..."
             cd /var/www
             git clone https://github.com/devktops/nextjs-app.git /var/www/nextjs-app || true
-            chown -R $USER:www-data /var/www/nextjs-app
-       
+            sudo chown -R $USER:www-data /var/www/nextjs-app
+            
             # Install project dependencies and build
             echo "Installing project dependencies and building the project..."
             cd /var/www/nextjs-app
