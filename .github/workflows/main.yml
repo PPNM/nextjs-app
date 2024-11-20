@@ -19,8 +19,8 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
+          workdir: /var/www/nextjs-app
           script: |
-            cd /var/www/nextjs-app
             npm i -y
             npm audit fix --force
             npm run build
