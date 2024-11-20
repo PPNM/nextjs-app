@@ -20,8 +20,8 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           script: |
-            cd /path/to/your/app
-            npm install
+            cd /var/www/nextjs-app
+            npm i -y
             npm audit fix --force
             npm run build
             pm2 start next-app
